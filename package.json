@@ -7,15 +7,15 @@
   },
   "dependencies": {
     "amazon-product-api": "^0.4.3",
-    "body-parser": "~1.16.0",
+    "body-parser": "^1.16.1",
     "cookie-parser": "^1.4.3",
-    "debug": "~2.6.0",
-    "express": "~4.14.1",
+    "debug": "^2.6.8",
+    "express": "^4.14.1",
     "jade": "~1.11.0",
-    "morgan": "^1.7.0",
+    "morgan": "^1.8.1",
     "mysql": "^2.13.0",
     "sequelize": "^3.30.4",
     "sequelize-cli": "^2.7.0",
-    "serve-favicon": "^2.3.2"
+    "serve-favicon": "^2.4.3"
   }
 }
