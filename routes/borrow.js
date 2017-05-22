@@ -124,7 +124,7 @@ router.get('/byMe_old/:user_id', function(req, res, next){
 router.post('/', function(req, res, next) {
   let p = req.body.productID;
   let u = req.body.userID;
-  let d = req.body.date;
+  let d = new Date();
 
   Borrow.create({
     BorrowDate: d,
@@ -144,7 +144,7 @@ router.post('/', function(req, res, next) {
 router.post('/return', function(req, res, next) {
   let p = req.body.productID;
   let u = req.body.userID;
-  let d = req.body.date;
+  let d = new Date();
 
   Borrow.update({
     renderingDate: d,
