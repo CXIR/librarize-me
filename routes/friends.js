@@ -122,7 +122,7 @@ router.post('/accept/', function(req, res, next) {
         idUser2 : f
       }
     }
-  }).then(function(friend){
+  ).then(function(friend){
     res.json(friend);
   }).catch(function(err){
     res.json({result: -1});
