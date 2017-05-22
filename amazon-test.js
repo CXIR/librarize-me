@@ -5,24 +5,24 @@ var client = amazon.createClient({
   awsSecret: "+MHLIoPLATNUU0HxbupnQ1mkiEt6QZ7XQvfeaVGx"
 });
 
+let asin = "B00008OE6I";
 
 client.itemLookup({
-  itemId: '1223069109',
-  responseGroup: 'ItemAttributes',
-   domain: 'webservices.amazon.fr'
+  itemId: asin,
+  responseGroup: 'ItemAttributes'
 }, function(err, results, response) {
   if (results) {
     console.log(results);
-    var res = results[0];
-    console.log("/***** Type : " + res.ItemAttributes.ProductGroup + " *****/");
-    console.log("/***** ASIN : " + res.ASIN + " *****/");
-    console.log("/***** EAN : " + res.ItemAttributes.EAN + " *****/");
+
+
+    console.log(results[0].ItemAttributes[0]["Title"][0]);
+    console.log(results[0].ItemAttributes[0]["ProductGroup"][0]);
+    console.log(results[0].ItemAttributes[0]["EAN"][0]);
 
   } else {
     console.log(err.Error);
   }
 });
-
 
 
 
