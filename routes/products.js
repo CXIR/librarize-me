@@ -59,10 +59,11 @@ router.get('/:product_id', function(req, res, next){
 //Ajout d'un produit à la bibliothèque de l'utilisateur via code ASIN
 //Recherche du produit via code ASIN
 //Puis ajout à la bibliothèque
-//TODO : Récupérer les résultats depuis API AMAZON
 router.post('/add', function(req, res, next) {
   let asin = req.body.asin;
   let user = req.body.user;
+  let date = new Date();
+  let n;
   let bc;
   let pt;
 
@@ -71,23 +72,28 @@ router.post('/add', function(req, res, next) {
     responseGroup: 'ItemAttributes'
   }, function(err, results, response) {
     if (results) {
-      console.log(results);
-      pt = results[0].ItemAttributes.ProductGroup; //marche pas
-      bc = results[0].ItemAttributes.EAN; // marche pas
+      n = results[0].ItemAttributes[0]["Title"][0];
+      pt = results[0].ItemAttributes[0]["ProductGroup"][0];
+      bc = results[0].ItemAttributes[0]["EAN"][0];
+
+      //Ajout en BDD
+      Product.create({
+        barCode: bc,
+        name : n,
+        add_date: date,
+        productType: pt,
+        ASINCode: asin,
+        UserId : user
+      }).then(function(product){
+        res.json(product);
+      }).catch(function(err){
+        console.log(err);
+        res.json({result: -1}); //SEQUELIZE ERROR
+      });
+
     } else {
       console.log(err.Error);
     }
-  });
-
-  Product.create({
-    barCode: bc,
-    productType: pt,
-    ASINCode: asin,
-    UserId : user
-  }).then(function(product){
-    res.json(product);
-  }).catch(function(err){
-    res.json({result: -1}); //SEQUELIZE ERROR
   });
 
 });

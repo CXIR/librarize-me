@@ -20,8 +20,10 @@ module.exports = function(sequelize, DataTypes) {
         let result = {};
         result.statutDemande = this.statutDemande;
         if (this.User) {
-          result.user = this.User.responsify();
+          result.user = this.User.responsify(); //marche pas
         }
+        result.user = this.idUser1;
+        result.friend = this.idUser2;
         return result;
       }
     }
