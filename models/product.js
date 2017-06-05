@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
     productType: {
       type : DataTypes.STRING
     },
-    ASINCode: {/
+    ASINCode: {
       type : DataTypes.STRING //CodeBarre spécific à Amazon
     }
   }, {
