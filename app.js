@@ -8,11 +8,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-/** Facebook Authentication Injections */
-var passport = require('passport');
-var util = require('util');
-var FacebookStrategy = require('passport-facebook').Strategy;
-var session = require('express-session');
 
 /**
 * Util Routes
@@ -52,6 +47,10 @@ app.use('/friends', friends);
 app.use('/borrow', borrow);
 app.use('/products', products);
 
+//app.use(passport.initialize());
+//app.use(passport.session());
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -69,6 +68,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 module.exports = app;

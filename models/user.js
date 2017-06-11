@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
         result.firstname = this.firstname;
         result.birthdate = this.birthdate;
         result.mailAdress = this.mailAdress;
-        result.password = this.password;        
+        result.password = this.password;
         if (this.Product) {
           result.product = this.Product.responsify();
         }

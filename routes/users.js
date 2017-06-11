@@ -5,6 +5,56 @@ const models = require('../models');
 const User = models.User;
 const router = express.Router();
 
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+/**************************AUTHENTICATION**************************/
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.use(new LocalStrategy({
+    usernameField: 'mail',
+    passwordField: 'pass'
+  },
+  function(mail, pass, done) {
+    User.find({
+      where: {
+        mailAdress : mail
+      }
+    }).then(function(user){
+      if(err) return done(err);
+      if(user){
+        if(user.password == pass){
+          return done(null,user);
+        }
+        else{
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+      }
+      else return done(null, false, { message: 'Incorrect username.' });
+    }).catch(function(err){
+      //res.json({result: -1});
+    });
+  }
+));
+
+router.post('/login',
+  passport.authenticate('local', { successRedirect: '/users/loginFailure',
+                                   failureRedirect: '/users/loginSuccess' }));
+
+router.get('/loginFailure', function(req, res, next) {
+  res.json({result:'Failed to authenticate'});
+});
+
+router.get('/loginSuccess', function(req, res, next) {
+  res.json({result:'Successfully authenticated'});
+});
+
 /**************************GET**************************/
 //Liste des utilisateurs
 router.get('/', function(req, res, next) {
@@ -56,15 +106,54 @@ router.post('/', function(req, res, next) {
     birthdate : b,
     mailAdress : ma,
     password : p
-  }).then(function(stud){
-    res.json(stud);
+  }).then(function(user){
+    res.json(user);
   }).catch(function(err){
     res.json({result: -1});
   });
 
 });
 
+router.post('/profile',function(req,res,next){
+  let first = req.body.first;
+  let name = req.body.name;
+  let mail = req.body.mail;
+
+  res.json({
+            first: first,
+            name: name,
+            mail: mail
+          });
+});
+
 //Modification d'un utilisateur
+router.post('/edit',function(req,res,next){
+  let id = req.body.id;
+  let name = req.body.name;
+  let first = req.body.first;
+  let birth = req.body.birth;
+  let mail = req.body.mail;
+  let pass = req.body.pass;
+
+  User.find({
+    where: { id : id}
+  }).then(function(user) {
+    if (user) {
+      user.updateAttributes({
+        lastname: name,
+        firstname : first,
+        birthdate : birth,
+        mailAdress : mail,
+        password : pass
+      });
+      res.json(user);
+    }
+    res.json({result: 404}); //USER NOT FOUND
+  }).catch(function(err){
+    res.json({result: -1}); //SEQUELIZE ERROR
+  });
+
+})
 
 
 /**************************DELETE**************************/
