@@ -1,3 +1,6 @@
+/**
+* Util Modules
+*/
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -5,11 +8,21 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+/** Facebook Authentication Injections */
+var passport = require('passport');
+var util = require('util');
+var FacebookStrategy = require('passport-facebook').Strategy;
+var session = require('express-session');
+
+/**
+* Util Routes
+*/
 var index = require('./routes/index');
 var users = require('./routes/users');
 var friends = require('./routes/friends');
 var borrow = require('./routes/borrow');
 var products = require('./routes/products');
+
 
 var models = require('./models');
 models.sequelize.sync();
@@ -29,6 +42,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+/**
+* App Accesses
+*/
 app.use('/', index);
 app.use('/users', users);
 app.use('/friends', friends);
@@ -52,5 +69,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
