@@ -5,19 +5,22 @@ var client = amazon.createClient({
   awsSecret: "+MHLIoPLATNUU0HxbupnQ1mkiEt6QZ7XQvfeaVGx"
 });
 
-let asin = "B00008OE6I";
+let asin = "B01F2AA3JK";
+
 
 client.itemLookup({
   itemId: asin,
   responseGroup: 'ItemAttributes'
 }, function(err, results, response) {
   if (results) {
-    console.log(results);
+    //console.log(results);
+
+    console.log(results[0].ItemAttributes[0]);
 
 
-    console.log(results[0].ItemAttributes[0]["Title"][0]);
-    console.log(results[0].ItemAttributes[0]["ProductGroup"][0]);
-    console.log(results[0].ItemAttributes[0]["EAN"][0]);
+    //console.log(results[0].ItemAttributes[0]["Title"][0]);
+    //console.log(results[0].ItemAttributes[0]["ProductGroup"][0]);
+    //console.log(results[0].ItemAttributes[0]["EAN"][0]);
 
   } else {
     console.log(err.Error);

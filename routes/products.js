@@ -12,7 +12,6 @@ const amazon_client = amazon.createClient({
 
 /**************************GET**************************/
 //Affichage de la bibliothèque d'un utilisateur (liste des produits sans description)
-//TODO : Affichage Pretty
 router.get('/users/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -22,7 +21,8 @@ router.get('/users/:user_id', function(req, res, next){
     offset : o,
   };
 
-  Product.findAll({options, where: {UserId : req.params.user_id}} ).then(function(products) {
+  Product.findAll({options, where: {UserId : req.params.user_id}} )
+  .then(function(products) {
     for(let product of products) {
       result.push(product.responsify());
     }
@@ -30,7 +30,6 @@ router.get('/users/:user_id', function(req, res, next){
   }).catch(function(err){
     res.json({result: -1});
   });
-
 
 });
 
@@ -43,9 +42,45 @@ router.get('/:product_id', function(req, res, next){
   }).then(function(product){
     if(product){
       let asin = product.ASINCode;
-      return res.json(product);
+      let info = [];
 
-      //TODO : recherche du produit via ASIN sur amazon pour afficher les détails
+      amazon_client.itemLookup({
+        itemId: asin,
+        responseGroup: 'ItemAttributes'
+      },function(err, results, response){
+        if(results){
+          let type = results[0].ItemAttributes[0]["ProductGroup"][0];
+
+          if(type == 'DVD'){
+            info['title'] = results[0].ItemAttributes[0]["Title"][0];
+            info['producer'] = results[0].ItemAttributes[0]["Director"][0];
+            info['actors'] = results[0].ItemAttributes[0]["Actor"][0];
+            info['format'] = results[0].ItemAttributes[0]["Format"][0];
+          }
+          if(type == 'Music'){
+            info['title'] = results[0].ItemAttributes[0]["Title"][0];
+            info['artist'] = results[0].ItemAttributes[0]["Artist"][0];
+            info['discs'] = results[0].ItemAttributes[0]["NumberOfDiscs"][0];
+          }
+          if(type == 'Video Game'){
+            info['title'] = results[0].ItemAttributes[0]["Title"][0];
+            info['description'] = results[0].ItemAttributes[0]["Feature"][0];
+            info['studio'] = results[0].ItemAttributes[0]["Studio"][0];
+            info['genre'] = results[0].ItemAttributes[0]["Genre"][0];
+            info['platform'] = results[0].ItemAttributes[0]["Platform"][0];
+          }
+          if(type == 'Book'){
+            info['title'] = results[0].ItemAttributes[0]["Title"][0];
+            info['author'] = results[0].ItemAttributes[0]["Author"][0];
+            info['type'] = results[0].ItemAttributes[0]["Binding"][0];
+            info['manufacturer'] = results[0].ItemAttributes[0]["Manufacturer"][0];
+            info['pages'] = results[0].ItemAttributes[0]["NumberOfPages"][0];
+            info['isbn'] = results[0].ItemAttributes[0]["ISBN"][0];
+          }
+
+          res.json(info);
+        }
+      });
 
     }
     res.json({result: 404}); //PRODUCT NOT FOUND
