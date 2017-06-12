@@ -7,7 +7,8 @@ const router = express.Router();
 
 
 /**************************GET**************************/
-//Liste des emprunts en cours de l'utilisateur (ses produits empruntés)
+
+/** Current user's borrows list */
 router.get('/byFriends/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -36,7 +37,7 @@ router.get('/byFriends/:user_id', function(req, res, next){
 
 });
 
-//Liste des emprunts en cours de l'utilisateur (les produits qu'ils a empruntés)
+/** Current borrows list from user */
 router.get('/byMe/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -61,7 +62,7 @@ router.get('/byMe/:user_id', function(req, res, next){
 
 });
 
-//Liste des emprunts passés de l'utilisateur (ses produits empruntés)
+/** Former user's borrows list */
 router.get('/byFriends_old/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -90,7 +91,7 @@ router.get('/byFriends_old/:user_id', function(req, res, next){
 
 });
 
-//Liste des emprunts passés de l'utilisateur (les produits qu'ils a empruntés)
+/** Former borrows list from user */
 router.get('/byMe_old/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -116,7 +117,8 @@ router.get('/byMe_old/:user_id', function(req, res, next){
 });
 
 /**************************POST**************************/
-//Création d'un emprunt
+
+/** New borrow */
 router.post('/', function(req, res, next) {
   let p = req.body.productID;
   let u = req.body.userID;
@@ -135,7 +137,7 @@ router.post('/', function(req, res, next) {
 
 });
 
-//Rendre un produit --> maj renderingDate
+/** Get back a borrow */
 router.post('/return', function(req, res, next) {
   let p = req.body.productID;
   let u = req.body.userID;

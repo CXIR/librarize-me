@@ -11,7 +11,8 @@ const amazon_client = amazon.createClient({
 });
 
 /**************************GET**************************/
-//Affichage de la bibliothèque d'un utilisateur (liste des produits sans description)
+
+/** Display user's products library (with no description) */
 router.get('/users/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -33,7 +34,7 @@ router.get('/users/:user_id', function(req, res, next){
 
 });
 
-//Affichage d'un produit d'un utilisateur (avec description)
+/** Display one user product (with description) */
 router.get('/:product_id', function(req, res, next){
   Product.find({
     where: {
@@ -91,9 +92,10 @@ router.get('/:product_id', function(req, res, next){
 
 
 /**************************POST**************************/
-//Ajout d'un produit à la bibliothèque de l'utilisateur via code ASIN
-//Recherche du produit via code ASIN
-//Puis ajout à la bibliothèque
+
+/** New product in user's library using ASIN code
+* process : product search on Amazon with ASIN code and insert into Database
+*/
 router.post('/add', function(req, res, next) {
   let asin = req.body.asin;
   let user = req.body.user;
@@ -111,7 +113,6 @@ router.post('/add', function(req, res, next) {
       pt = results[0].ItemAttributes[0]["ProductGroup"][0];
       bc = results[0].ItemAttributes[0]["EAN"][0];
 
-      //Ajout en BDD
       Product.create({
         barCode: bc,
         name : n,
@@ -133,10 +134,10 @@ router.post('/add', function(req, res, next) {
 
 });
 
-//Recherche de produits par EAN/Keywords/Type/ASIN
-//EAN & ASIN -> Retourne un élément
-//Keywords & Type -> Retourne une liste
-//TODO : Affichage Pretty
+/** Product search on Amazon using EAN/Keywords/Type/ASIN
+* EAN & ASIN return an element
+* Keyword & Type return a list
+*/
 router.post('/find', function(req, res, next) {
   let type = req.body.type;
   let value = req.body.value;

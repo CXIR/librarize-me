@@ -7,7 +7,8 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement : true,
     },
     barCode: {
-      type : DataTypes.STRING //Code EAN ou ISBN du produit
+      // EAN or ISBN product code
+      type : DataTypes.STRING
     },
     name: {
       type : DataTypes.STRING
@@ -19,7 +20,8 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.STRING
     },
     ASINCode: {
-      type : DataTypes.STRING //CodeBarre spécific à Amazon
+      // Specific Amazon code
+      type : DataTypes.STRING
     }
   }, {
     classMethods: {

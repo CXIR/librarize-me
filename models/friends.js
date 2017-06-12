@@ -8,10 +8,12 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Friends.belongsTo(models.User, {
-            foreignKey: 'idUser1' //celui qui fait la demande d'amis
+            // User who ask
+            foreignKey: 'idUser1'
         });
         Friends.belongsTo(models.User, {
-            foreignKey: 'idUser2' // celui qui est demandé
+            // User who receive ask
+            foreignKey: 'idUser2'
         });
       }
     },
@@ -20,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
         let result = {};
         result.statutDemande = this.statutDemande;
         if (this.User) {
-          result.user = this.User.responsify(); //marche pas
+          result.user = this.User.responsify();
         }
         result.user = this.idUser1;
         result.friend = this.idUser2;

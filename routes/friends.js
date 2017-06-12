@@ -6,7 +6,8 @@ const Friends = models.Friends;
 const router = express.Router();
 
 /**************************GET**************************/
-//Affichage de la liste d'amis d'un utilisateur (statutDemande = 'Valide'& User -> idUser1 & idUser2)
+
+/** Display user's current friend list */
 router.get('/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -38,7 +39,7 @@ router.get('/:user_id', function(req, res, next){
 
 });
 
-//Affichage de la liste des demandes d'amis en cours d'un utilisateur (statutDemande = 'EnAttente' & idUser1)
+/** Display user's current sent friend requests */
 router.get('/send_request/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -63,7 +64,7 @@ router.get('/send_request/:user_id', function(req, res, next){
 
 });
 
-//Affichage des demandes d'amis d'un utilisateur (statutDemande = 'EnAttente' & idUser2)
+/** Display user's current received friend requests */
 router.get('/received_request/:user_id', function(req, res, next){
   let l = parseInt(req.query.limit) || 20;
   let o = parseInt(req.query.offset) || 0;
@@ -90,10 +91,13 @@ router.get('/received_request/:user_id', function(req, res, next){
 });
 
 /**************************POST**************************/
-//Faire une demande d'amitié (=> Création de la demande)
+
+/** Send friend request */
 router.post('/', function(req, res, next) {
-  let u = req.body.user; //celui qui fait la demande
-  let f = req.body.friend; //celui qui est demandé
+  // User who ask
+  let u = req.body.user;
+  // User who receive ask
+  let f = req.body.friend;
   let s = 'EnAttente';
 
   Friends.create({
@@ -108,10 +112,12 @@ router.post('/', function(req, res, next) {
 
 });
 
-//Valider une demande d'amitié (statutDemande = 'EnAttente' -> 'Valide')
+/** Accept friend request */
 router.post('/accept/', function(req, res, next) {
-  let u = req.body.user; //celui qui fait la demande
-  let f = req.body.friend; //celui qui est demandé
+  // User who ask
+  let u = req.body.user;
+  // User who receive ask
+  let f = req.body.friend;
   let s = 'Valide';
 
   Friends.update({
@@ -131,7 +137,8 @@ router.post('/accept/', function(req, res, next) {
 });
 
 /**************************DELETE**************************/
-//Refuser une demande d'amitié/Supprimer un ami (=> Suppression de la demande)
+
+/** Reject friend request / delete friend */
 router.delete('/:user_id/:friend_id', function(req, res, next) {
 
   Friends.find({
