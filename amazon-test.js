@@ -5,7 +5,7 @@ var client = amazon.createClient({
   awsSecret: "+MHLIoPLATNUU0HxbupnQ1mkiEt6QZ7XQvfeaVGx"
 });
 
-let asin = "B01F2AA3JK";
+let asin = "B0052OSNGM";
 
 
 client.itemLookup({

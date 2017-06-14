@@ -142,8 +142,12 @@ router.post('/accept/', function(req, res, next) {
 router.delete('/:user_id/:friend_id', function(req, res, next) {
 
   Friends.find({
-    where: { idUser1 : req.params.user_id
-    , idUser2 : req.params.friend_id }
+    where: {
+              /** User asking */
+              idUser1 : req.params.user_id,
+              /** User who receive */
+              idUser2 : req.params.friend_id
+            }
   }).then(function(friend) {
     if (friend) {
       return friend.destroy().then(function(friend){

@@ -42,49 +42,52 @@ router.get('/:product_id', function(req, res, next){
     }
   }).then(function(product){
     if(product){
+      console.log(product);
       let asin = product.ASINCode;
-      let info = [];
+      let info = {};
 
       amazon_client.itemLookup({
         itemId: asin,
+        idType: "ASIN",
         responseGroup: 'ItemAttributes'
       },function(err, results, response){
         if(results){
           let type = results[0].ItemAttributes[0]["ProductGroup"][0];
 
           if(type == 'DVD'){
-            info['title'] = results[0].ItemAttributes[0]["Title"][0];
-            info['producer'] = results[0].ItemAttributes[0]["Director"][0];
-            info['actors'] = results[0].ItemAttributes[0]["Actor"][0];
-            info['format'] = results[0].ItemAttributes[0]["Format"][0];
+            info['title'] = results[0].ItemAttributes[0]["Title"];
+            info['producer'] = results[0].ItemAttributes[0]["Director"];
+            info['actors'] = results[0].ItemAttributes[0]["Actor"];
+            info['format'] = results[0].ItemAttributes[0]["Format"];
           }
           if(type == 'Music'){
-            info['title'] = results[0].ItemAttributes[0]["Title"][0];
-            info['artist'] = results[0].ItemAttributes[0]["Artist"][0];
-            info['discs'] = results[0].ItemAttributes[0]["NumberOfDiscs"][0];
+            info['title'] = results[0].ItemAttributes[0]["Title"];
+            info['artist'] = results[0].ItemAttributes[0]["Artist"];
+            info['discs'] = results[0].ItemAttributes[0]["NumberOfDiscs"];
           }
           if(type == 'Video Game'){
-            info['title'] = results[0].ItemAttributes[0]["Title"][0];
-            info['description'] = results[0].ItemAttributes[0]["Feature"][0];
-            info['studio'] = results[0].ItemAttributes[0]["Studio"][0];
-            info['genre'] = results[0].ItemAttributes[0]["Genre"][0];
-            info['platform'] = results[0].ItemAttributes[0]["Platform"][0];
+            info['title'] = results[0].ItemAttributes[0]["Title"];
+            info['description'] = results[0].ItemAttributes[0]["Feature"];
+            info['studio'] = results[0].ItemAttributes[0]["Studio"];
+            info['genre'] = results[0].ItemAttributes[0]["Genre"];
+            info['platform'] = results[0].ItemAttributes[0]["Platform"];
           }
           if(type == 'Book'){
-            info['title'] = results[0].ItemAttributes[0]["Title"][0];
-            info['author'] = results[0].ItemAttributes[0]["Author"][0];
-            info['type'] = results[0].ItemAttributes[0]["Binding"][0];
-            info['manufacturer'] = results[0].ItemAttributes[0]["Manufacturer"][0];
-            info['pages'] = results[0].ItemAttributes[0]["NumberOfPages"][0];
-            info['isbn'] = results[0].ItemAttributes[0]["ISBN"][0];
+            info['title'] = results[0].ItemAttributes[0]["Title"];
+            info['author'] = results[0].ItemAttributes[0]["Author"];
+            info['type'] = results[0].ItemAttributes[0]["Binding"];
+            info['manufacturer'] = results[0].ItemAttributes[0]["Manufacturer"];
+            info['pages'] = results[0].ItemAttributes[0]["NumberOfPages"];
+            info['isbn'] = results[0].ItemAttributes[0]["ISBN"];
           }
 
           res.json(info);
         }
       });
 
+    }else {
+      res.json({result: 404}); //PRODUCT NOT FOUND
     }
-    res.json({result: 404}); //PRODUCT NOT FOUND
   }).catch(function(err){
     res.json({result: -1});
   });
@@ -190,6 +193,24 @@ router.post('/find', function(req, res, next) {
       res.json(err);
     });
   }
+});
+
+/**************************DELETE**************************/
+
+router.delete('/:product_id', function(req, res, next){
+  Product.find({
+    where: { id : req.params.product_id }
+  }).then(function(product) {
+    if (product) {
+      return product.destroy().then(function(product){
+        res.json({result: 1});
+      });
+    }
+    res.json({result: 404}); //PRODUCT NOT FOUND
+  }).catch(function(err){
+    res.json({result: -1}); //SEQUELIZE ERROR
+  });
+
 });
 
 /**************************END**************************/

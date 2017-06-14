@@ -1,8 +1,10 @@
 "use strict";
 
 const express = require('express');
+const Sequelize = require('sequelize');
 const models = require('../models');
 const Borrow = models.Borrow;
+const Product = models.Product;
 const router = express.Router();
 
 
@@ -21,10 +23,10 @@ router.get('/byFriends/:user_id', function(req, res, next){
   Borrow.findAll({options,
     include: [{
         model: Product,
-        where: { UserId: Sequelize.col(req.params.user_id) }
+        where: { UserId: req.params.user_id }
     }],
      where: {
-      renderingDate :NULL
+      renderingDate : null
   }
   }).then(function(allBorrowered) {
       for(let oneBorrowered of allBorrowered) {
@@ -48,8 +50,8 @@ router.get('/byMe/:user_id', function(req, res, next){
   };
 
   Borrow.findAll({options, where: {
-      UserId : req.params.user_id,  // TODO : Vérifier nom
-      renderingDate :NULL
+      UserId : req.params.user_id,
+      renderingDate: null
   }
   }).then(function(allBorrowered) {
       for(let oneBorrowered of allBorrowered) {
@@ -75,7 +77,7 @@ router.get('/byFriends_old/:user_id', function(req, res, next){
   Borrow.findAll({options,
     include: [{
         model: Product,
-        where: { UserId: Sequelize.col(req.params.user_id) }
+        where: { UserId: req.params.user_id }
     }],
      where: {
       renderingDate : { $lte : new Date() }
@@ -140,6 +142,7 @@ router.post('/', function(req, res, next) {
 /** Get back a borrow */
 router.post('/return', function(req, res, next) {
   let p = req.body.productID;
+  /** User who borrowed */
   let u = req.body.userID;
   let d = new Date();
 
