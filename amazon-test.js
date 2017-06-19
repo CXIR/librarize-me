@@ -1,8 +1,8 @@
 var amazon = require('amazon-product-api');
 
 var client = amazon.createClient({
-  awsId: "AKIAJ57L27I3YHIMBQJA",
-  awsSecret: "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"
+  awsId: "",
+  awsSecret: ""
 });
 
 let asin = "B0052OSNGM";
