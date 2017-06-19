@@ -6,8 +6,8 @@ const amazon = require('amazon-product-api');
 const Product = models.Product;
 const router = express.Router();
 const amazon_client = amazon.createClient({
-  awsId: "AKIAJ57L27I3YHIMBQJA",
-  awsSecret: "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"
+  awsId: "",
+  awsSecret: "+"
 });
 
 /**************************GET**************************/
